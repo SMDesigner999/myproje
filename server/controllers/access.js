@@ -18,5 +18,5 @@ const get = (req, res) => {
 };
 
 module.exports = (router) => {
-  router.get("/", get);
+  router.get("/access", get);
 };
