@@ -1,0 +1,35 @@
+{
+  "name": "myproject",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "nodemon index.js",
+    "dbCreate": "cross-env MIGRATE_TOOL=true npx sequelize-cli db:create",
+    "mi": "cross-env MIGRATE_TOOL=true npx sequelize-cli db:migrate",
+    "miUndo": "cross-env MIGRATE_TOOL=true npx sequelize-cli db:migrate:undo",
+    "miCreate": "cross-env MIGRATE_TOOL=true npx sequelize-mig migration:make -n",
+    "miPrev": "cross-env MIGRATE_TOOL=true npx sequelize-mig migration:make --preview",
+    "mis": "cross-env MIGRATE_TOOL=true npx sequelize-cli db:seed:all",
+    "misu": "cross-env MIGRATE_TOOL=true npx sequelize-cli db:seed:undo",
+    "firstInit": "npm run dbCreate && npm run mi && npm run misu && npm run mis",
+    "postinstall": "cd ../client && npm i  --legacy-peer-deps"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "@fastify/websocket": "^7.1.1",
+    "cross-env": "^7.0.3",
+    "dotenv": "^16.0.3",
+    "fastify": "^4.10.2",
+    "nodemon": "^2.0.20",
+    "pg": "^8.8.0",
+    "pg-hstore": "^2.3.4",
+    "read-excel-file": "^5.5.3",
+    "sequelize": "^6.27.0",
+    "sequelize-cli": "^6.5.2",
+    "sequelize-mig": "github:sacredneobi/sequelize-mig",
+    "telegraf": "^4.11.2"
+  }
+}
