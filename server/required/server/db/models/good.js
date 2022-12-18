@@ -1,29 +1,26 @@
 const def = (db, DataTypes, options) => {
   const model = db.define(
-    "compositionOrder",
+    "good",
     {
-      count: DataTypes.FLOAT,
-      sale: DataTypes.FLOAT,
+      caption: DataTypes.TEXT,
       description: DataTypes.TEXT,
     },
     options
   );
-
   model.associate = (models) => {
-    model.belongsTo(models.order, {
-      foreignKey: "orderId",
-      as: "order",
+    model.belongsTo(models.article, {
+      foreignKey: "articleId",
+      as: "article",
       onUpdate: "NO ACTION",
       onDelete: "CASCADE",
     });
-    model.belongsTo(models.good, {
-      foreignKey: "goodIdId",
-      as: "good",
+    model.belongsTo(models.warehouse, {
+      foreignKey: "warehouseId",
+      as: "warehouse",
       onUpdate: "NO ACTION",
       onDelete: "CASCADE",
     });
   };
-
   return model;
 };
 

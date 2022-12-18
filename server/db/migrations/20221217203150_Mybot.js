@@ -18,8 +18,8 @@ const Sequelize = require("sequelize");
 
 const info = {
   revision: 1,
-  name: "init",
-  created: "2022-12-14T15:43:07.441Z",
+  name: "Mybot",
+  created: "2022-12-17T20:31:50.574Z",
   comment: "",
 };
 
@@ -210,7 +210,6 @@ const migrationCommands = (transaction) => [
           allowNull: false,
         },
         description: { type: Sequelize.TEXT, field: "description" },
-        isPayment: { type: Sequelize.BOOLEAN, field: "isPayment" },
         updatedAt: {
           type: Sequelize.DATE,
           field: "updatedAt",
@@ -258,9 +257,9 @@ const migrationCommands = (transaction) => [
           references: { model: "orders", key: "id" },
           allowNull: true,
         },
-        goodId: {
+        goodIdId: {
           type: Sequelize.INTEGER,
-          field: "goodId",
+          field: "goodIdId",
           onUpdate: "NO ACTION",
           onDelete: "CASCADE",
           references: { model: "goods", key: "id" },

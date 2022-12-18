@@ -10,4 +10,11 @@ Content-Type: application/json
 {
     "asd":"123"
 }
+###
+POST   http://127.0.0.1:4000/api/loadListGood 
+Content-Type: application/json
+
+{
+    "asd":"123"
+}
  

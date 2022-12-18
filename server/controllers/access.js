@@ -1,3 +1,4 @@
+const { checkMethod } = require("../utils");
 const defMenu = [
   { caption: "Andrey", icon: "directions_walk" },
   { caption: "GRAND", icon: "self_improvement" },
@@ -17,6 +18,12 @@ const get = (req, res) => {
   res.status(200).send({ route: defMenu, routeSetting: defSettings });
 };
 
-module.exports = (router) => {
-  router.get("/", get);
+module.exports = (fastify, moduleName, data, path) => {
+  fastify.get(path, checkMethod(get, moduleName));
+  // fastify.post(path, checkMethod(post, moduleName));
+  // console.log(fastify);
+  // console.log(fastify.get);
+  // console.log(path);
+  //   console.log(123);
+  // console.log(fastify.get("/", () => {}));
 };
