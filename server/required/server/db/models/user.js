@@ -1,16 +1,18 @@
 const def = (db, DataTypes, options) => {
   const model = db.define(
-    "order",
+    "user",
     {
+      name: DataTypes.TEXT,
+      password: DataTypes.TEXT,
       description: DataTypes.TEXT,
     },
     options
   );
 
   model.associate = (models) => {
-    model.belongsTo(models.client, {
-      foreignKey: "clientId",
-      as: "client",
+    model.belongsTo(models.role, {
+      foreignKey: "roleId",
+      as: "role",
       onUpdate: "NO ACTION",
       onDelete: "CASCADE",
     });

@@ -11,7 +11,8 @@ const def = (method, moduleName) => {
     try {
       method(req, res, error);
     } catch (err) {
-      error(err);
+      // error(err);
+      console.log(err);
     }
   };
 };

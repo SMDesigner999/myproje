@@ -1,5 +1,5 @@
 require("dotenv").config();
-const fastify = require("fastify")();
+const fastify = require("fastify")({ logger: true });
 // {
 //   logger: true;
 // }
@@ -11,19 +11,27 @@ const { commands } = require("./utils/telegrafProto");
 
 const ws = require("./webSocket");
 typeof ws === "function" && ws(fastify, bot);
+// fastify.addHook("onRequest", function (request, reply, next) {
+//   sleep(30000);
 
-// fastify.register(async function (fastify) {
-//   fastify.get(
-//     "/",
-//     { websocket: true },
-//     (connection /* SocketStream */, req /* FastifyRequest */) => {
-//       connection.socket.on("message", (message) => {
-//         // message.toString() === 'hi from client'
-//         connection.socket.send("hi from server");
-//       });
-//     }
-//   );
+//   next();
 // });
+// fastify.use((request, reply, next) => {
+
+//   next();
+// });
+fastify.addHook("onRequest", (request, reply, done) => {
+  // Some code
+  sleep(3000);
+  setTimeout(() => {
+    done();
+  }, 0);
+});
+// fastify.addHook("onRequest", async (request, reply) => {
+//   // Some code
+//   await sleep(3000);
+// });
+
 // initCommand(bot);
 // bot.telegram.setMyCommands(
 //   commands.sort((left, right) =>
@@ -35,6 +43,7 @@ loader({ path: "./controllers", type: "Express controller" }, bot, () => {
   // app.use(`/api/${moduleName}`, router);
   return fastify;
 });
+
 bot.telegram.setMyCommands(commands);
 // fastify.get("/", (request, reply) => {
 //   return { hello: "world" };
@@ -42,32 +51,32 @@ bot.telegram.setMyCommands(commands);
 // fastify.get("/", (req, res) => {
 //   res.send({ hello: "world" });
 // });
-fastify.post("/api/goods", (request, res) => {
-  const { query_id, user } = request.body;
-  if (query_id) {
-    bot.telegram.answerWebAppQuery(query_id, {
-      type: "article",
-      id: query_id,
-      title: "YOUTUBE",
-      input_message_content: { message_text: "ПРИВЕТ МИР" },
-    });
-  }
-  // console.log(request.body);
-  // console.log(user.id);
+// fastify.post("/api/goods", (request, res) => {
+//   const { query_id, user } = request.body;
+//   if (query_id) {
+//     bot.telegram.answerWebAppQuery(query_id, {
+//       type: "article",
+//       id: query_id,
+//       title: "YOUTUBE",
+//       input_message_content: { message_text: "ПРИВЕТ МИР" },
+//     });
+//   }
+// console.log(request.body);
+// console.log(user.id);
 
-  // bot.use((ctx, next) => {
-  //   ctx.reply("👍");
-  //   next();
-  // });
-  // bot.telegram.sendMessage(user.id, "File content at: " + new Date() + "");
-  // app.on("message", function (ctx, next) {
-  //   ctx.telegram.sendMessage(
-  //     ctx.message.chat.id,
-  //     "File content at: " + new Date() + " is: \n" + file
-  //   );
-  // });
-  res.status(200).send({ done: true });
-});
+// bot.use((ctx, next) => {
+//   ctx.reply("👍");
+//   next();
+// });
+// bot.telegram.sendMessage(user.id, "File content at: " + new Date() + "");
+// app.on("message", function (ctx, next) {
+//   ctx.telegram.sendMessage(
+//     ctx.message.chat.id,
+//     "File content at: " + new Date() + " is: \n" + file
+//   );
+// });
+//   res.status(200).send({ done: true });
+// });
 // https://74bd-84-54-94-97.eu.ngrok.io
 bot.on("sticker", (ctx) => {
   console.log(ctx);
@@ -81,9 +90,18 @@ bot.use((ctx, next) => {
   next();
 });
 bot.launch();
-fastify.listen({ port: 4000 }, (err) => {
-  if (err) {
+// fastify.listen({ port: 4000 }, (err) => {
+//   if (err) {
+//     fastify.log.error(err);
+//     process.exit(1);
+//   }
+// });
+const start = async () => {
+  try {
+    await fastify.listen({ port: 4000 });
+  } catch (err) {
     fastify.log.error(err);
     process.exit(1);
   }
-});
+};
+start();
