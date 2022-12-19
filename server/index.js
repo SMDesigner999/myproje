@@ -20,13 +20,13 @@ typeof ws === "function" && ws(fastify, bot);
 
 //   next();
 // });
-fastify.addHook("onRequest", (request, reply, done) => {
-  // Some code
-  sleep(3000);
-  setTimeout(() => {
-    done();
-  }, 0);
-});
+// fastify.addHook("onRequest", (request, reply, done) => {
+//   // Some code
+//   sleep(3000);
+//   setTimeout(() => {
+//     done();
+//   }, 0);
+// });
 // fastify.addHook("onRequest", async (request, reply) => {
 //   // Some code
 //   await sleep(3000);
@@ -64,10 +64,10 @@ bot.telegram.setMyCommands(commands);
 // console.log(request.body);
 // console.log(user.id);
 
-// bot.use((ctx, next) => {
-//   ctx.reply("👍");
-//   next();
-// });
+bot.use((ctx, next) => {
+  ctx.reply("👍");
+  next();
+});
 // bot.telegram.sendMessage(user.id, "File content at: " + new Date() + "");
 // app.on("message", function (ctx, next) {
 //   ctx.telegram.sendMessage(
@@ -90,18 +90,18 @@ bot.use((ctx, next) => {
   next();
 });
 bot.launch();
-// fastify.listen({ port: 4000 }, (err) => {
-//   if (err) {
-//     fastify.log.error(err);
-//     process.exit(1);
-//   }
-// });
-const start = async () => {
-  try {
-    await fastify.listen({ port: 4000 });
-  } catch (err) {
+fastify.listen({ port: 4000 }, (err) => {
+  if (err) {
     fastify.log.error(err);
     process.exit(1);
   }
-};
-start();
+});
+// const start = async () => {
+//   try {
+//     await fastify.listen({ port: 4000 });
+//   } catch (err) {
+//     fastify.log.error(err);
+//     process.exit(1);
+//   }
+// };
+// start();

@@ -52,23 +52,29 @@ const def = (fastify, bot) => {
   //   console.log("socket client connect");
   // });
 
-  bot.on("message", (ctx) => {
-    const user = ctx.message.from;
-    let userName = user.first_name ? user.first_name : "";
-    userName = userName + (user.last_name ? " " + user.last_name : "");
-    userName = userName + (user.username ? ` (${user.username})` : "");
+  bot.use((ctx, next) => {
+    let entities = ctx.message?.entities ? ctx.message.entities : null;
+    let entitiesArr = entities ? entities[0] : null;
+    if (!entities && entitiesArr?.type !== "bot_command") {
+      const user = ctx.message.from;
+      let userName = user.first_name ? user.first_name : "";
+      userName = userName + (user.last_name ? " " + user.last_name : "");
+      userName = userName + (user.username ? ` (${user.username})` : "");
+      const data = {
+        userName,
+        message: ctx.message.text,
+        id: `${ctx.message.chat.id}.${ctx.message.message_id}`,
+      };
 
-    const data = {
-      userName,
-      message: ctx.message.text,
-      id: `${ctx.message.chat.id}.${ctx.message.message_id}`,
-    };
-    console.log(data);
-    fastify.websocketServer.clients.forEach(function each(client) {
-      if (client.readyState === 1) {
-        client.send(JSON.stringify(data));
-      }
-    });
+      fastify.websocketServer.clients.forEach(function each(client) {
+        if (client.readyState === 1) {
+          client.send(JSON.stringify(data));
+        }
+      });
+    } else {
+      next();
+    }
+
     // fastify.register(async function (fastify) {
     //   fastify.get(
     //     "/test_ws",
