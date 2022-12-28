@@ -5,13 +5,22 @@
 //   res.send({ hello: "world" });
 // });
 const models = require("../db/models");
+const { HasMany, HasOne, Op } = require("sequelize");
 const model = models.good;
-const { HasMany, Op } = require("sequelize");
 const { checkMethod } = require("../utils");
 const get = (req, res, promiseError) => {
-  const search = req.query?.search
-    ? { caption: { [Op.iLike]: `%${req.query?.search}%` } }
+  const { search, articleId, id, ...other } = req.query;
+  const searchCaption = search
+    ? { caption: { [Op.iLike]: `%${search}%` } }
     : null;
+  const searchArticle = articleId ? { articleId } : null;
+
+  const searchId = id ? { id } : null;
+
+  const where =
+    searchArticle || searchCaption || searchId
+      ? { ...searchCaption, ...searchArticle, ...searchId }
+      : null;
   model
     .findAndCountAll({
       attributes: {
@@ -30,23 +39,24 @@ const get = (req, res, promiseError) => {
           attributes: { exclude: ["createdAt", "updatedAt", "deletedAt"] },
         },
         {
-          association: new HasMany(model, models.price, {}),
+          association: new HasOne(model, models.price, {}),
           required: false,
           attributes: {
             exclude: [
               "goodId",
+              "id",
+              "description",
               "purchase",
               "createdAt",
               "updatedAt",
               "deletedAt",
             ],
           },
-          where: { id: 100 },
         },
       ],
       order: [["id", "ASC"]],
-      ...req.query,
-      where: search,
+      ...other,
+      where: where,
     })
     .then((data) => {
       res.status(200).send(data);

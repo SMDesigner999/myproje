@@ -18,8 +18,8 @@ const Sequelize = require("sequelize");
 
 const info = {
   revision: 1,
-  name: "Mybot",
-  created: "2022-12-17T20:31:50.574Z",
+  name: "noname",
+  created: "2022-12-28T20:53:04.200Z",
   comment: "",
 };
 
@@ -257,9 +257,9 @@ const migrationCommands = (transaction) => [
           references: { model: "orders", key: "id" },
           allowNull: true,
         },
-        goodIdId: {
+        goodId: {
           type: Sequelize.INTEGER,
-          field: "goodIdId",
+          field: "goodId",
           onUpdate: "NO ACTION",
           onDelete: "CASCADE",
           references: { model: "goods", key: "id" },
